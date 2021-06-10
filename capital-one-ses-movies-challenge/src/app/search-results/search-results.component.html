@@ -1,1 +1,16 @@
-<p>search-results works!</p>
+<div class="row">
+  <div class="col-12">
+
+    <!-- Prompt displayed if no successful search has occurred -->
+    <div *ngIf="movies.length === 0" class="alert alert-light" role="alert">
+      Please use the search bar to find movies
+    </div>
+
+    <!-- Displays movies data only after a successful search has occurred -->
+    <app-search-result
+      *ngFor="let movie of movies"
+      [movie]="movie">
+    </app-search-result>
+
+  </div>
+</div>

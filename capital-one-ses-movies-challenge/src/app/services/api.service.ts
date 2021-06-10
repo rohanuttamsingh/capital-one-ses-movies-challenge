@@ -54,7 +54,7 @@ export class ApiService {
                   releaseDate: movieResult['Released'],
                   director: movieResult['Director'],
                   genre: movieResult['Genre'],
-                  poster: movieResult['Poster']
+                  posterUrl: movieResult['Poster']
                 };
               })
             )

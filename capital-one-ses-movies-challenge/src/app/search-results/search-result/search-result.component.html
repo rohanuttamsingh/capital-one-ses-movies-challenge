@@ -1,0 +1,21 @@
+<div class="row my-1">
+
+  <!-- Only displays the poster if one exists -->
+  <div class="col-4">
+    <img
+      *ngIf="movie.posterUrl !== undefined"
+      [src]="movie.posterUrl"
+      alt="Movie Poster"
+      class="img-fluid">
+  </div>
+
+  <!-- Displays remainder of information about movie -->
+  <div class="col-8">
+    <h3>{{ movie.title }}</h3>
+    <h5>Release Date: {{ movie.releaseDate }}</h5>
+    <h5>Genre: {{ movie.genre }}</h5>
+    <h5>Director: {{ movie.director }}</h5>
+  </div>
+
+</div>
+
