@@ -21,6 +21,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   onSearchClicked() {
-    this.apiService.searchForMovies(this.searchForm.value['title']);
+    if (this.searchForm.value['title'] !== '') {
+      this.apiService.searchForMovies(this.searchForm.value['title']);
+    }
   }
 }
