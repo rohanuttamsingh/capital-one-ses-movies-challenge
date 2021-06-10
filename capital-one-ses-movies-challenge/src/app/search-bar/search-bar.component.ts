@@ -18,9 +18,7 @@ export class SearchBarComponent implements OnInit {
     );
   }
 
-  onSearch() {
-    this.apiService.searchForMovies(this.searchForm.value['title']).subscribe(
-      resultsData => console.log(resultsData)
-    );
+  onSearchClicked() {
+    this.apiService.searchForMovies(this.searchForm.value['title']);
   }
 }
