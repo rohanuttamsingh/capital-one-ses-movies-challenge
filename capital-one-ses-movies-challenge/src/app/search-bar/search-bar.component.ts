@@ -14,6 +14,8 @@ export class SearchBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = new FormGroup(
+      /* TODO: Even though title is required, can still submit form and trigger an error by
+          submitting empty form */
       { 'title': new FormControl('', [Validators.required]) }
     );
   }
