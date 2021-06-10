@@ -9,7 +9,11 @@
           id="search-bar"
           placeholder="Search Movies by Title"
           aria-label="Search Movies by Title">
+
+        <!-- Button is disabled when the search bar is empty to serve as a visual cue to enter a
+        title -->
         <button
+          [disabled]="searchForm.value['title'] === ''"
           class="btn btn-outline-primary"
           type="submit"
           id="search-button">
