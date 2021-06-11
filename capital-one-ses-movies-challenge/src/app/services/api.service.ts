@@ -21,9 +21,16 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  searchForMovies(title: string) {
-    // GETs the ID's of the movies with titles that match the title parameter
-    this.searchForIds(title).subscribe(
+  /**
+   * GETs detailed info about movies on the specified page that match the title parameter.
+   * Informs listening components of these movies.
+   * @param title Title of movie to find.
+   * @param page Page of results that will be searched.
+   */
+  searchForMovies(title: string, page: number = 1) {
+    // GETs the ID's of the movies on the specified page of results with titles that match the title
+    // parameter
+    this.searchForIds(title, page).subscribe(
       (resultIds) => {
         let movies: Movie[] = [];
 
@@ -80,13 +87,12 @@ export class ApiService {
   }
 
   /**
-   * GETs the IMDb ID's of every movie that matches the title passed in.
+   * GETs the IMDb ID's of every movie that matches the title passed in on the specified page.
    * @param title Title of movie to find.
+   * @param page Page of results that will be returned.
    * @private
-   * TODO: Currently only returns ID's of first page of movies, so incomplete when there are more
-   * than 10 results
    */
-  private searchForIds(title: string) {
+  private searchForIds(title: string, page: number = 1) {
     let searchParams = new HttpParams();
 
     // Using API "By Search" option to get multiple results
@@ -94,6 +100,9 @@ export class ApiService {
 
     // Only searching for movies
     searchParams = searchParams.append('type', 'movie');
+
+    // Searches the specified page
+    searchParams = searchParams.append('page', page);
 
     // Need to append key to end of every request
     searchParams = searchParams.append('apiKey', this.apiKey);
