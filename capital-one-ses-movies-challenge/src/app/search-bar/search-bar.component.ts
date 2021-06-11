@@ -20,9 +20,15 @@ export class SearchBarComponent implements OnInit {
     );
   }
 
+  /**
+   * Searches for movies using the ApiService. Updates the currentPage field of the ApiService
+   * instance to reflect that the first page of results is being showed (the intended behavior
+   * after clicking "Search").
+   */
   onSearchClicked() {
     if (this.searchForm.value['title'] !== '') {
       this.apiService.searchForMovies(this.searchForm.value['title']);
+      this.apiService.currentPage = 1;
     }
   }
 }

@@ -17,6 +17,8 @@ export class ApiService {
   apiKey = '81a25063';
   baseUrl = 'http://www.omdbapi.com/';
   moviesChanged = new Subject<Movie[]>();
+  currentTitle = '';
+  currentPage = 0;
 
   constructor(private http: HttpClient) {
   }
@@ -28,6 +30,9 @@ export class ApiService {
    * @param page Page of results that will be searched.
    */
   searchForMovies(title: string, page: number = 1) {
+    // Stores title searched for use when getting next and previous pages
+    this.currentTitle = title;
+
     // GETs the ID's of the movies on the specified page of results with titles that match the title
     // parameter
     this.searchForIds(title, page).subscribe(
@@ -75,6 +80,25 @@ export class ApiService {
         }
       }
     );
+  }
+
+  // TODO: Might need to load in all movies at the same time because they sometimes load in
+  // in a different order after hitting next then previous
+
+  /**
+   * GETs detailed info about movies on the next page that match the title parameter.
+   * Informs listening components of these movies.
+   */
+  loadPreviousPage() {
+    this.searchForMovies(this.currentTitle, --this.currentPage);
+  }
+
+  /**
+   * GETs detailed info about movies on the previous page that match the title parameter.
+   * Informs listening components of these movies.
+   */
+  loadNextPage() {
+    this.searchForMovies(this.currentTitle, ++this.currentPage);
   }
 
   /**

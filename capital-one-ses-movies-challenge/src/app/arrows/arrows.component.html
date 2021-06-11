@@ -1,0 +1,22 @@
+<div class="row my-5">
+  <div class="col-12">
+
+    <!-- Previous button should be able to be clicked in there are results on the previous page -->
+    <button
+      (click)="onClickPrevious()"
+      [disabled]="!hasPreviousMovies"
+      class="btn btn-outline-primary btn-lg float-start"
+      type="button">
+      &lt;&lt;
+    </button>
+
+    <!-- Next button should be able to be clicked in there are results on the next page -->
+    <button
+      (click)="onClickNext()"
+      [disabled]="!hasPreviousMovies"
+      class="btn btn-outline-primary btn-lg float-end"
+      type="button">
+      &gt;&gt;
+    </button>
+  </div>
+</div>
