@@ -16,9 +16,18 @@ import { ByIdResultModel } from '../models/by-id-result.model';
 export class ApiService {
   apiKey = '81a25063';
   baseUrl = 'http://www.omdbapi.com/';
+  movies: Movie[][] = [];
   moviesChanged = new Subject<Movie[]>();
   currentTitle = '';
   currentPage = 0;
+
+  /**
+   * The index in the movies array that contains the movies of the current page of results is one
+   * less than the current page queried to the API because the API begins numbering pages at 1.
+   */
+  get moviesIndex() {
+    return this.currentPage - 1;
+  }
 
   constructor(private http: HttpClient) {
   }
@@ -30,8 +39,9 @@ export class ApiService {
    * @param page Page of results that will be searched.
    */
   searchForMovies(title: string, page: number = 1) {
-    // Stores title searched for use when getting next and previous pages
+    // Stores title and page searched for use when getting next and previous pages
     this.currentTitle = title;
+    this.currentPage = page;
 
     // GETs the ID's of the movies on the specified page of results with titles that match the title
     // parameter
@@ -82,32 +92,44 @@ export class ApiService {
     );
   }
 
-  // TODO: Might need to load in all movies at the same time because they sometimes load in
-  // in a different order after hitting next then previous
-
   /**
-   * GETs detailed info about movies on the next page that match the title parameter.
-   * Informs listening components of these movies.
+   * If the previous page has already been visited, sends those stored movies to the listening
+   * components. Otherwise, GETs detailed info about movies on the previous page that match the
+   * title parameter and informs listening components of these movies.
    */
   loadPreviousPage() {
-    this.searchForMovies(this.currentTitle, --this.currentPage);
+    this.currentPage--;
+    if (this.movies[this.moviesIndex]) {
+      this.moviesChanged.next(this.movies[this.moviesIndex]);
+    } else {
+      this.searchForMovies(this.currentTitle, this.currentPage);
+    }
   }
 
   /**
-   * GETs detailed info about movies on the previous page that match the title parameter.
-   * Informs listening components of these movies.
+   * If the next page has already been visited, sends those stored movies to the listening
+   * components. Otherwise, GETs detailed info about movies on the next page that match the
+   * title parameter and informs listening components of these movies.
    */
   loadNextPage() {
-    this.searchForMovies(this.currentTitle, ++this.currentPage);
+    this.currentPage++;
+    if (this.movies[this.moviesIndex]) {
+      this.moviesChanged.next(this.movies[this.moviesIndex]);
+    } else {
+      this.searchForMovies(this.currentTitle, this.currentPage);
+    }
   }
 
   /**
-   * Informs listening components that the movies data has been updated.
+   * Adds movies to the movies array at the proper index. Sends subscribed components the new
+   * movies to display.
+   *
    * @param newMovies Array of new movies to display.
    * @private
    */
   private updateMovies(newMovies: Movie[]) {
-    this.moviesChanged.next(newMovies.slice());
+    this.movies[this.moviesIndex] = newMovies.slice();
+    this.moviesChanged.next(this.movies[this.moviesIndex]);
   }
 
   /**
