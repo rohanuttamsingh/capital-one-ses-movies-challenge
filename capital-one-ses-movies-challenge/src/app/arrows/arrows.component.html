@@ -5,18 +5,20 @@
     <button
       (click)="onClickPrevious()"
       [disabled]="!hasPreviousMovies"
-      class="btn btn-outline-primary btn-lg float-start"
+      class="btn btn-lg float-start"
+      [ngClass]="hasPreviousMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
       type="button">
-      &lt;&lt;
+      &lt;&lt; Prev Movies
     </button>
 
     <!-- Next button should be able to be clicked in there are results on the next page -->
     <button
       (click)="onClickNext()"
-      [disabled]="!hasPreviousMovies"
-      class="btn btn-outline-primary btn-lg float-end"
+      [disabled]="!hasNextMovies"
+      class="btn btn-lg  float-end"
+      [ngClass]="hasNextMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
       type="button">
-      &gt;&gt;
+      Next Movies &gt;&gt;
     </button>
   </div>
 </div>
