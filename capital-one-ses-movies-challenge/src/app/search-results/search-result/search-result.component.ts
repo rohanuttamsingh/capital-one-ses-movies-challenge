@@ -8,12 +8,7 @@ import { Movie } from '../../models/movie.model';
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  @Input() movie: Movie = {
-    title: 'default',
-    releaseDate: 'default',
-    genre: 'default',
-    director: 'default'
-  };
+  @Input() movie!: Movie;
 
   constructor() { }
 

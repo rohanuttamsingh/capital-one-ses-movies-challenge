@@ -72,11 +72,11 @@ export class ApiService {
               map((movieResult) => {
                 // Transforms query result to only store useful data
                 return {
-                  title: movieResult['Title'],
-                  releaseDate: movieResult['Released'],
-                  director: movieResult['Director'],
-                  genre: movieResult['Genre'],
-                  posterUrl: movieResult['Poster']
+                  title: movieResult.Title,
+                  releaseDate: movieResult.Released,
+                  director: movieResult.Director,
+                  genre: movieResult.Genre,
+                  posterUrl: movieResult.Poster
                 };
               })
             )
@@ -156,15 +156,15 @@ export class ApiService {
     // GET the IMDb ID's of every movie that matches the user's title query and push those ID's into
     // the resultIds array in the default order they appear
     return this.http
-      .get<{ [key: string]: BySearchResultModel[] }>(
+      .get<BySearchResultModel>(
         this.baseUrl,
         { params: searchParams }
       )
       .pipe(
         map((searchResults) => {
           let resultIds: string[] = [];
-          for (const searchResult of searchResults['Search']) {
-            resultIds.push(searchResult['imdbID']);
+          for (const searchResult of searchResults.Search) {
+            resultIds.push(searchResult.imdbID);
           }
           return resultIds;
         })

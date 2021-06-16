@@ -3,9 +3,13 @@
  * Not every result has a "Poster" tag, so that field is optional.
  */
 export interface BySearchResultModel {
-  Title: string;
-  Year: string;
-  imdbID: string;
-  Type: string;
-  Poster?: string;
+  Response: boolean;
+  Search: {
+    Title: string;
+    Year: string;
+    imdbID: string;
+    Type: string;
+    Poster?: string;
+  }[];
+  totalResults: number;
 }
