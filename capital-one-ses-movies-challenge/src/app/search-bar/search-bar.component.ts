@@ -14,19 +14,18 @@ export class SearchBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = new FormGroup(
-      /* TODO: Even though title is required, can still submit form and trigger an error by
-          submitting empty form */
       { 'title': new FormControl('', [Validators.required]) }
     );
   }
 
   /**
-   * Searches for movies using the ApiService. Updates the currentPage field of the ApiService
-   * instance to reflect that the first page of results is being showed (the intended behavior
-   * after clicking "Search").
+   * Searches for movies using the ApiService. Clears the movie results currently stored in the
+   * service. Resets the current page to 1 to reflect that the first page of results is being
+   * showed.
    */
   onSearchClicked() {
     if (this.searchForm.value['title'] !== '') {
+      this.apiService.clearMovies();
       this.apiService.searchForMovies(this.searchForm.value['title']);
       this.apiService.currentPage = 1;
     }

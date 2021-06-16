@@ -15,7 +15,13 @@ export class ArrowsComponent implements OnInit {
     return this.apiService.currentPage > 1;
   }
 
-  hasNextMovies = true;
+  /**
+   * There is a next page of movies if there are movies that have not been displayed on the previous
+   * or current pages.
+   */
+  get hasNextMovies() {
+    return this.apiService.remainingResults > 0;
+  }
 
   constructor(private apiService: ApiService) { }
 

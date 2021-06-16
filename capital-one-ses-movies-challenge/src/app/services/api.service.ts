@@ -20,6 +20,7 @@ export class ApiService {
   moviesChanged = new Subject<Movie[]>();
   currentTitle = '';
   currentPage = 0;
+  totalResults = 0;
 
   /**
    * The index in the movies array that contains the movies of the current page of results is one
@@ -29,7 +30,23 @@ export class ApiService {
     return this.currentPage - 1;
   }
 
+  /**
+   * The movies returned by this search that are on pages greater than the current one is equal to
+   * the total results displayed on this page and previous pages (10 movies a page) less than the
+   * total number of results returned by the search.
+   */
+  get remainingResults() {
+    return this.totalResults - 10 * this.currentPage;
+  }
+
   constructor(private http: HttpClient) {
+  }
+
+  /**
+   * Resets the movies array to an empty array. Used when searching for a new title.
+   */
+  clearMovies() {
+    this.movies = [];
   }
 
   /**
@@ -162,6 +179,11 @@ export class ApiService {
       )
       .pipe(
         map((searchResults) => {
+          // Sets the global variable to the total number of movies returned by this search
+          this.totalResults = searchResults.totalResults;
+
+          // Returns the IMDb ID of every movie returned by this search in order to look up
+          // more detailed info on these movies later
           let resultIds: string[] = [];
           for (const searchResult of searchResults.Search) {
             resultIds.push(searchResult.imdbID);
