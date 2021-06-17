@@ -22,4 +22,7 @@ export class SearchResultsComponent implements OnInit {
     );
   }
 
+  get searchHadResults() {
+    return this.apiService.hasResponses;
+  }
 }

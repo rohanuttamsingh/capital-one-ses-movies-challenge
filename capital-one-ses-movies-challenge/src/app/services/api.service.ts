@@ -21,6 +21,7 @@ export class ApiService {
   currentTitle = '';
   currentPage = 0;
   totalResults = 0;
+  hasResponses = true;
 
   /**
    * The index in the movies array that contains the movies of the current page of results is one
@@ -64,47 +65,58 @@ export class ApiService {
     // parameter
     this.searchForIds(title, page).subscribe(
       (resultIds) => {
-        let movies: Movie[] = [];
+        if (resultIds) {
+          // If searchForIds returns a valid array of IMDb ID's, GETs detailed info on the
+          // corresponding movies
+          this.hasResponses = true;
 
-        // Searches every matching movie by ID to get more details
-        for (let id of resultIds) {
-          let searchParams = new HttpParams();
+          let movies: Movie[] = [];
 
-          // Using API "By ID" option to get single, detailed result
-          searchParams = searchParams.append('i', id);
+          // Searches every matching movie by ID to get more details
+          for (let id of resultIds) {
+            let searchParams = new HttpParams();
 
-          // Only searching for movies
-          searchParams = searchParams.append('type', 'movie');
+            // Using API "By ID" option to get single, detailed result
+            searchParams = searchParams.append('i', id);
 
-          // Need to append key to end of every request
-          searchParams = searchParams.append('apiKey', this.apiKey);
+            // Only searching for movies
+            searchParams = searchParams.append('type', 'movie');
 
-          // GETs more detailed info on every matching movie
-          this.http
-            .get<ByIdResultModel>(
-              this.baseUrl,
-              { params: searchParams }
-            )
-            .pipe(
-              map((movieResult) => {
-                // Transforms query result to only store useful data
-                return {
-                  title: movieResult.Title,
-                  releaseDate: movieResult.Released,
-                  releaseYear: +movieResult.Year,
-                  director: movieResult.Director,
-                  genre: movieResult.Genre,
-                  posterUrl: movieResult.Poster
-                };
-              })
-            )
-            .subscribe(
-              (movie) => {
-                // Informs listening components of the new movies to display
-                movies.push(movie);
-                this.updateMovies(movies);
-              }
-            );
+            // Need to append key to end of every request
+            searchParams = searchParams.append('apiKey', this.apiKey);
+
+            // GETs more detailed info on every matching movie
+            this.http
+              .get<ByIdResultModel>(
+                this.baseUrl,
+                { params: searchParams }
+              )
+              .pipe(
+                map((movieResult) => {
+                  // Transforms query result to only store useful data
+                  return {
+                    title: movieResult.Title,
+                    releaseDate: movieResult.Released,
+                    releaseYear: +movieResult.Year,
+                    director: movieResult.Director,
+                    genre: movieResult.Genre,
+                    posterUrl: movieResult.Poster
+                  };
+                })
+              )
+              .subscribe(
+                (movie) => {
+                  // Informs listening components of the new movies to display
+                  movies.push(movie);
+                  this.updateMovies(movies);
+                }
+              );
+          }
+        } else {
+          // If searchForIds returns false, there were no results
+          this.hasResponses = false;
+          this.clearMovies();
+          this.updateMovies([]);
         }
       }
     );
@@ -180,6 +192,10 @@ export class ApiService {
       )
       .pipe(
         map((searchResults) => {
+          if (searchResults.Response === 'False') {
+            return false;
+          }
+
           // Sets the global variable to the total number of movies returned by this search
           this.totalResults = searchResults.totalResults;
 

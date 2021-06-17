@@ -1,9 +1,14 @@
 <div class="row">
   <div class="col-12">
 
-    <!-- Prompt displayed if no successful search has occurred -->
-    <div *ngIf="movies.length === 0" class="alert alert-light" role="alert">
+    <!-- Prompt displayed if no search has occurred -->
+    <div *ngIf="movies.length === 0 && searchHadResults" class="alert alert-light" role="alert">
       Please use the search bar to find movies
+    </div>
+
+    <!-- Informs user if search had no results -->
+    <div *ngIf="!searchHadResults" class="alert alert-danger" role="alert">
+      Your search had no results
     </div>
 
     <!-- Displays movies data only after a successful search has occurred -->

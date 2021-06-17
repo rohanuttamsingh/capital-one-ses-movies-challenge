@@ -3,7 +3,7 @@
  * Not every result has a "Poster" tag, so that field is optional.
  */
 export interface BySearchResultModel {
-  Response: boolean;
+  Response: string;
   Search: {
     Title: string;
     Year: string;
