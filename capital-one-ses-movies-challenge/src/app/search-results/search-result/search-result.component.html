@@ -12,8 +12,8 @@
   <!-- Displays remainder of information about movie -->
   <div class="col-8">
     <h3>{{ movie.title }}</h3>
-    <!-- TODO: Release Date can be N/A, should display Year of Release in that case -->
-    <h5>Release Date: {{ movie.releaseDate }}</h5>
+    <!-- Release date is sometimes "N/A," shows release year in that case -->
+    <h5>Release Date: {{ movie.releaseDate === 'N/A' ? movie.releaseYear : movie.releaseDate }}</h5>
     <h5>Genre: {{ movie.genre }}</h5>
     <h5>Director: {{ movie.director }}</h5>
   </div>

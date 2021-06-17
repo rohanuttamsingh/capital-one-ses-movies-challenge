@@ -91,6 +91,7 @@ export class ApiService {
                 return {
                   title: movieResult.Title,
                   releaseDate: movieResult.Released,
+                  releaseYear: +movieResult.Year,
                   director: movieResult.Director,
                   genre: movieResult.Genre,
                   posterUrl: movieResult.Poster

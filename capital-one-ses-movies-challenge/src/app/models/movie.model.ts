@@ -5,6 +5,7 @@
 export interface Movie {
   title: string;
   releaseDate: string;
+  releaseYear: number;
   genre: string;
   director: string;
   posterUrl?: string;
