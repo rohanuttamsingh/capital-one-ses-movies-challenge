@@ -3,9 +3,9 @@
   <!-- Only displays the poster if one exists -->
   <div class="col-4">
     <img
-      *ngIf="movie.posterUrl !== undefined"
+      *ngIf="movie.posterUrl !== 'N/A'"
       [src]="movie.posterUrl"
-      alt="Movie Poster"
+      alt="{{ movie.title }} Poster"
       class="img-fluid">
   </div>
 
@@ -14,9 +14,17 @@
     <h3>{{ movie.title }}</h3>
     <!-- Release date is sometimes "N/A," shows release year in that case -->
     <h5>Release Date: {{ movie.releaseDate === 'N/A' ? movie.releaseYear : movie.releaseDate }}</h5>
-    <h5>Genre: {{ movie.genre }}</h5>
-    <h5>Director: {{ movie.director }}</h5>
+    <h5 *ngIf="movie.genre !== 'N/A'">Genre: {{ movie.genre }}</h5>
+    <h5 *ngIf="movie.language !== 'N/A'">Languages: {{ movie.language }}</h5>
+    <h5 *ngIf="movie.director !== 'N/A'">Director: {{ movie.director }}</h5>
+    <h5 *ngIf="movie.actors !== 'N/A'">Starring: {{ movie.actors }}</h5>
+    <h5 *ngIf="movie.awards !== 'N/A'">Awards: {{ movie.awards }}</h5>
+    <h5 *ngIf="movie.boxOffice !== 'N/A'">Box Office: {{ movie.boxOffice }}</h5>
+    <h5>IMDb Rating: {{ movie.imdbRating }}/10</h5>
+    <h5 *ngIf="movie.metascore !== 'N/A'">Metascore: {{ movie.metascore }}/10</h5>
   </div>
 
 </div>
+
+<hr>
 

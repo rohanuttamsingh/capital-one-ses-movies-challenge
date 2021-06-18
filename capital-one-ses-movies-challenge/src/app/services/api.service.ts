@@ -100,7 +100,13 @@ export class ApiService {
                     releaseYear: +movieResult.Year,
                     director: movieResult.Director,
                     genre: movieResult.Genre,
-                    posterUrl: movieResult.Poster
+                    posterUrl: movieResult.Poster,
+                    awards: movieResult.Awards,
+                    imdbRating: movieResult.imdbRating,
+                    boxOffice: movieResult.BoxOffice,
+                    language: movieResult.Language,
+                    actors: movieResult.Actors,
+                    metascore: movieResult.Metascore
                   };
                 })
               )

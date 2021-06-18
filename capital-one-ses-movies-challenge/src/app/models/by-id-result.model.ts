@@ -17,7 +17,7 @@ export interface ByIdResultModel {
   Country: string;
   Awards: string;
   Ratings: { Source: string, Value: string }[];
-  Metascore: number;
+  Metascore: string;
   imdbRating: number;
   imdbVotes: number;
   imdbID: string;
@@ -27,5 +27,5 @@ export interface ByIdResultModel {
   Production: string;
   Website: string;
   Response: string;
-  Poster?: string;
+  Poster: string;
 }
