@@ -10,6 +10,7 @@ import { Movie } from '../models/movie.model';
 })
 export class SearchResultsComponent implements OnInit {
   movies: Movie[] = [];
+  selectedMovie!: Movie;
 
   constructor(private apiService: ApiService) { }
 
@@ -18,11 +19,18 @@ export class SearchResultsComponent implements OnInit {
     this.apiService.moviesChanged.subscribe(
       (newMovies: Movie[]) => {
         this.movies = newMovies;
+
+        // By default, shows the first result to the user
+        this.selectedMovie = this.movies[0];
       }
     );
   }
 
   get searchHadResults() {
     return this.apiService.hasResponses;
+  }
+
+  setSelectedMovie(movie: Movie) {
+    this.selectedMovie = movie;
   }
 }

@@ -10,7 +10,6 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
-import { SearchResultComponent } from './search-results/search-result/search-result.component';
 import { ArrowsComponent } from './arrows/arrows.component';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { ArrowsComponent } from './arrows/arrows.component';
     FooterComponent,
     SearchBarComponent,
     SearchResultsComponent,
-    SearchResultComponent,
     ArrowsComponent
   ],
     imports: [

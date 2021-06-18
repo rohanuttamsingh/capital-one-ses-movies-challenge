@@ -11,11 +11,66 @@
       Your search had no results
     </div>
 
-    <!-- Displays movies data only after a successful search has occurred -->
-    <app-search-result
-      *ngFor="let movie of movies"
-      [movie]="movie">
-    </app-search-result>
-
   </div>
+
+    <!-- Displays movies data only after a successful search has occurred -->
+<!--    <app-search-result-->
+<!--      *ngFor="let movie of movies"-->
+<!--      [movie]="movie">-->
+<!--    </app-search-result>-->
+
+  <!-- Search Results -->
+  <span *ngIf="movies.length > 0" class="my-1">Click on a movie to view more info</span>
+  <div *ngIf="movies.length > 0" class="col-5" style="height: 75vh; overflow-y: scroll; cursor: pointer;">
+    <div *ngFor="let movie of movies" (click)="setSelectedMovie(movie)" class="row">
+      <!-- Only displays poster in search results on large enough screen -->
+      <div class="d-none d-md-block col-md-3">
+        <img
+          *ngIf="movie.posterUrl !== 'N/A'"
+          [src]="movie.posterUrl"
+          alt="{{ movie.title }} Poster"
+          class="img-fluid rounded my-1">
+      </div>
+      <div class="col-9">
+        <h3>{{ movie.title }}</h3>
+        <h4>{{ movie.releaseYear }}</h4>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <!-- Selected Result -->
+  <div *ngIf="movies.length > 0" class="col-7">
+    <div class="row my-2">
+
+      <!-- Only displays the poster if one exists -->
+      <div *ngIf="selectedMovie.posterUrl !== 'N/A'" class="col-md-5">
+        <img
+          [src]="selectedMovie.posterUrl"
+          alt="{{ selectedMovie.title }} Poster"
+          class="img-fluid">
+      </div>
+
+      <!-- Primary Movie Information -->
+      <div class="col-md-7">
+        <h3>{{ selectedMovie.title }}</h3>
+        <!-- Release date is sometimes "N/A," shows release year in that case -->
+        <h5>{{ selectedMovie.releaseDate === 'N/A' ? selectedMovie.releaseYear : selectedMovie.releaseDate }}</h5>
+        <h5 *ngIf="selectedMovie.director !== 'N/A'">Director: {{ selectedMovie.director }}</h5>
+        <h5 *ngIf="selectedMovie.actors !== 'N/A'">Starring: {{ selectedMovie.actors }}</h5>
+        <h5 *ngIf="selectedMovie.genre !== 'N/A'">Genre: {{ selectedMovie.genre }}</h5>
+        <h5 *ngIf="selectedMovie.language !== 'N/A'">Languages: {{ selectedMovie.language }}</h5>
+      </div>
+
+    </div>
+
+    <!-- Secondary Movie Information -->
+    <div class="row">
+      <h5 *ngIf="selectedMovie.awards !== 'N/A'">Awards: {{ selectedMovie.awards }}</h5>
+      <h5 *ngIf="selectedMovie.boxOffice !== 'N/A'">Box Office: {{ selectedMovie.boxOffice }}</h5>
+      <h5>IMDb Rating: {{ selectedMovie.imdbRating }}/10</h5>
+      <h5 *ngIf="selectedMovie.metascore !== 'N/A'">Metascore: {{ selectedMovie.metascore }}/10</h5>
+    </div>
+  </div>
+
 </div>
