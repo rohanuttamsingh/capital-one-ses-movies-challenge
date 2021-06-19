@@ -33,4 +33,27 @@ export class SearchResultsComponent implements OnInit {
   setSelectedMovie(movie: Movie) {
     this.selectedMovie = movie;
   }
+
+  /**
+   * There is always a previous page of movies unless the user is on the first page of results.
+   */
+  get hasPreviousMovies() {
+    return this.apiService.currentPage > 1;
+  }
+
+  /**
+   * There is a next page of movies if there are movies that have not been displayed on the previous
+   * or current pages.
+   */
+  get hasNextMovies() {
+    return this.apiService.remainingResults > 0;
+  }
+
+  onClickPrevious() {
+    this.apiService.loadPreviousPage();
+  }
+
+  onClickNext() {
+    this.apiService.loadNextPage();
+  }
 }

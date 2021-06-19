@@ -10,7 +10,6 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
-import { ArrowsComponent } from './arrows/arrows.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { ArrowsComponent } from './arrows/arrows.component';
     HeaderComponent,
     FooterComponent,
     SearchBarComponent,
-    SearchResultsComponent,
-    ArrowsComponent
+    SearchResultsComponent
   ],
     imports: [
       BrowserModule,
