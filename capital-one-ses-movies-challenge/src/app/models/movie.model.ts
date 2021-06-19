@@ -16,3 +16,13 @@ export interface Movie {
   actors: string;
   metascore: string;
 }
+
+/**
+ * The properties of a movie that are displayed in the left results panel.
+ */
+export interface MovieSummary {
+  title: string;
+  releaseYear: number;
+  posterUrl: string;
+  imdbId: string; // Used to look up more details on movie
+}

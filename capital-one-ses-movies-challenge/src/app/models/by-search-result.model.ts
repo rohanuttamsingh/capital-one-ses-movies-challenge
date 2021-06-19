@@ -1,6 +1,6 @@
 /**
  * The properties that a search result will have when querying the API "By Search."
- * Not every result has a "Poster" tag, so that field is optional.
+ * Note: not every result in Search will have every field.
  */
 export interface BySearchResultModel {
   Response: string;
@@ -9,7 +9,7 @@ export interface BySearchResultModel {
     Year: string;
     imdbID: string;
     Type: string;
-    Poster?: string;
+    Poster: string;
   }[];
   totalResults: number;
 }

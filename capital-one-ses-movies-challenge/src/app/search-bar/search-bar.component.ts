@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
@@ -10,7 +10,7 @@ import { ApiService } from '../services/api.service';
 export class SearchBarComponent implements OnInit {
   searchForm = new FormGroup({ 'default': new FormControl('') });
 
-  constructor(private apiService: ApiService) { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.searchForm = new FormGroup(
@@ -19,15 +19,12 @@ export class SearchBarComponent implements OnInit {
   }
 
   /**
-   * Searches for movies using the ApiService. Clears the movie results currently stored in the
-   * service. Resets the current page to 1 to reflect that the first page of results is being
-   * showed.
+   * Pushes the searched for title in the query parameters, which is used by the SearchResultsComponent to
+   * execute a new search.
    */
   onSearchClicked() {
     if (this.searchForm.value['title'] !== '') {
-      this.apiService.clearMovies();
-      this.apiService.searchForMovies(this.searchForm.value['title']);
-      this.apiService.currentPage = 1;
+      this.router.navigate([''], { queryParams: { title: this.searchForm.value['title'] } });
     }
   }
 }
