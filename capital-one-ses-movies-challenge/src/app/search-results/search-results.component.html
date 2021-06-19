@@ -67,30 +67,36 @@
     </div>
   </div>
 
-  <!-- Pagination -->
-  <div class="row my-5">
-    <div class="col-12">
+  <!-- Pagination and Show More -->
+  <div class="d-flex flex-row justify-content-between my-5">
+    <!-- Previous button should be able to be clicked in there are results on the previous page -->
+    <button
+      (click)="onClickPrevious()"
+      [disabled]="!hasPreviousMovies"
+      class="btn btn-lg"
+      [ngClass]="hasPreviousMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      type="button">
+      &lt;&lt; Prev Movies
+    </button>
 
-      <!-- Previous button should be able to be clicked in there are results on the previous page -->
-      <button
-        (click)="onClickPrevious()"
-        [disabled]="!hasPreviousMovies"
-        class="btn btn-lg float-start"
-        [ngClass]="hasPreviousMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
-        type="button">
-        &lt;&lt; Prev Movies
-      </button>
+    <button
+      (click)="onClickShowMore()"
+      [disabled]="movies.length === 0"
+      class="btn btn-lg"
+      [ngClass]="movies.length > 0 ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      type="button">
+      Show More
+    </button>
 
-      <!-- Next button should be able to be clicked in there are results on the next page -->
-      <button
-        (click)="onClickNext()"
-        [disabled]="!hasNextMovies"
-        class="btn btn-lg  float-end"
-        [ngClass]="hasNextMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
-        type="button">
-        Next Movies &gt;&gt;
-      </button>
-    </div>
+    <!-- Next button should be able to be clicked in there are results on the next page -->
+    <button
+      (click)="onClickNext()"
+      [disabled]="!hasNextMovies"
+      class="btn btn-lg"
+      [ngClass]="hasNextMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      type="button">
+      Next Movies &gt;&gt;
+    </button>
   </div>
 
 </div>

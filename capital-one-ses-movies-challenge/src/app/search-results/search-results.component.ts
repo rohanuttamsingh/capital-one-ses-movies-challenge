@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { from } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 import { Movie, MovieSummary } from '../models/movie.model';
 import { BySearchResultModel } from '../models/by-search-result.model';
@@ -80,13 +82,17 @@ export class SearchResultsComponent implements OnInit {
     // Need to append key to end of every request
     searchParams = searchParams.append('apiKey', this.apiKey);
 
-    // GET basic info about each matching movie and pushes that info into the array of movies results
+    // GETs basic info about each matching movie and pushes that info into the array of movies results
     this.http.get<BySearchResultModel>(this.baseUrl, { params: searchParams })
       .subscribe((searchResults: BySearchResultModel) => {
         if (searchResults.Response === 'False') {
           // Indicates that there were no matching movies
           this.hasResponses = false;
+          this.totalResults = 0;
         } else {
+          // Indicates that there were matching movies
+          this.hasResponses = true;
+
           // Keeps track of the total number of matching movies for use in pagination
           this.totalResults = searchResults.totalResults;
 
@@ -167,5 +173,70 @@ export class SearchResultsComponent implements OnInit {
    */
   onClickNext() {
     this.searchForIds(++this.currentPage);
+  }
+
+  /**
+   * Updates results to include the movies on all pages, not just the selected page.
+   */
+  onClickShowMore() {
+    this.showAllMovies();
+  }
+
+  /**
+   * GETs basic info about every movie on any page with a matching title as the user's query, and pushes this
+   * info to the array of movies results to be displayed.
+   */
+  showAllMovies() {
+    // Resets the array of movies results to empty it of any previous searches
+    this.movies = [];
+
+    // Array of all of the pages that need to be queried
+    let pages: number[] = [];
+    // 10 results per page, pages start at index 1
+    for (let i = 1; i <= this.totalResults / 10 + 1; i++) {
+      pages.push(i);
+    }
+
+    // Converts the pages array to an observable to work nicely with sequential HTTP requests
+    const pagesObservable = from(pages);
+
+    // Flattens pages observable using a concatMap in order to send sequential HTTP requests so that the movies results
+    // are always displayed in the same order as they appear in the API
+    pagesObservable.pipe(
+      concatMap((page: number) => {
+        let searchParams = new HttpParams();
+
+        // Using API "By Search" option to get multiple results
+        searchParams = searchParams.append('s', this.title);
+
+        // Only searching for movies
+        searchParams = searchParams.append('type', 'movie');
+
+        // Searches the specified page
+        searchParams = searchParams.append('page', page);
+
+        // Need to append key to end of every request
+        searchParams = searchParams.append('apiKey', this.apiKey);
+
+        // GETs basic info about each matching movie and pushes that info into the array of movies results
+        return this.http.get<BySearchResultModel>(this.baseUrl, { params: searchParams });
+      })
+    ).subscribe((searchResults: BySearchResultModel) => {
+      // Adds the basic movies info to the array of movies results
+      for (const result of searchResults.Search) {
+        this.movies.push(
+          {
+            title: result.Title,
+            releaseYear: +result.Year,
+            posterUrl: result.Poster,
+            imdbId: result.imdbID
+          }
+        );
+      }
+
+      // Always sets the selected movie to the first movie in the array, so that the first movie on the first page is
+      // selected regardless of the number of pages
+      this.setSelectedMovie(this.movies[0]);
+    });
   }
 }
