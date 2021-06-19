@@ -13,15 +13,9 @@
 
   </div>
 
-    <!-- Displays movies data only after a successful search has occurred -->
-<!--    <app-search-result-->
-<!--      *ngFor="let movie of movies"-->
-<!--      [movie]="movie">-->
-<!--    </app-search-result>-->
-
   <!-- Search Results -->
   <span *ngIf="movies.length > 0" class="my-1">Click on a movie to view more info</span>
-  <div *ngIf="movies.length > 0" class="col-5" style="height: 75vh; overflow-y: scroll; cursor: pointer;">
+  <div *ngIf="movies.length > 0" class="col-5 left-panel" style="height: 75vh; overflow-y: scroll; cursor: pointer;">
     <div *ngFor="let movie of movies" (click)="setSelectedMovie(movie)" class="row">
       <!-- Only displays poster in search results on large enough screen -->
       <div class="d-none d-md-block col-md-3">
@@ -40,7 +34,7 @@
   </div>
 
   <!-- Selected Result -->
-  <div *ngIf="movies.length > 0" class="col-7">
+  <div *ngIf="movies.length > 0" class="col-7 right-panel">
     <div class="row my-2">
 
       <!-- Only displays the poster if one exists -->
