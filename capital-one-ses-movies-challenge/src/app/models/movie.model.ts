@@ -10,7 +10,7 @@ export interface Movie {
   director: string;
   posterUrl: string;
   awards: string;
-  imdbRating: number;
+  imdbRating: string;
   boxOffice: string;
   language: string;
   actors: string;

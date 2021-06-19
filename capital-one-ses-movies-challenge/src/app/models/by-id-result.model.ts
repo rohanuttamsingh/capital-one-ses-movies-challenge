@@ -18,7 +18,7 @@ export interface ByIdResultModel {
   Awards: string;
   Ratings: { Source: string, Value: string }[];
   Metascore: string;
-  imdbRating: number;
+  imdbRating: string;
   imdbVotes: number;
   imdbID: string;
   Type: string;

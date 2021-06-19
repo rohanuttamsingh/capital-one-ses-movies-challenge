@@ -62,7 +62,7 @@
     <div class="row">
       <h5 *ngIf="selectedMovie.awards !== 'N/A'">Awards: {{ selectedMovie.awards }}</h5>
       <h5 *ngIf="selectedMovie.boxOffice !== 'N/A'">Box Office: {{ selectedMovie.boxOffice }}</h5>
-      <h5>IMDb Rating: {{ selectedMovie.imdbRating }}/10</h5>
+      <h5 *ngIf="selectedMovie.imdbRating !== 'N/A'">IMDb Rating: {{ selectedMovie.imdbRating }}/10</h5>
       <h5 *ngIf="selectedMovie.metascore !== 'N/A'">Metascore: {{ selectedMovie.metascore }}/10</h5>
     </div>
   </div>
