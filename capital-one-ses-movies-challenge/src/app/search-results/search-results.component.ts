@@ -25,9 +25,10 @@ export class SearchResultsComponent implements OnInit {
   currentPage = 0;
   totalResults = 0;
 
-  hasResponses = true;
+  hasSearched = false;
 
   showingAll = false;
+  invalidYearRange = false;
 
   filterByYearForm = new FormGroup({ 'default': new FormControl('') });
 
@@ -60,12 +61,14 @@ export class SearchResultsComponent implements OnInit {
         this.currentPage = 1;
         this.searchForIds(this.currentPage);
         this.showingAll = false;
+        this.invalidYearRange = false;
+        this.hasSearched = true;
 
         this.filterByYearForm = new FormGroup({
           'filterByYear': new FormControl(false, [Validators.required]),
           'startYear': new FormControl('', [Validators.required]),
           'endYear': new FormControl('', [Validators.required])
-        })
+        });
       }
     });
   }
@@ -98,13 +101,8 @@ export class SearchResultsComponent implements OnInit {
     this.http.get<BySearchResultModel>(this.baseUrl, { params: searchParams })
       .subscribe((searchResults: BySearchResultModel) => {
         if (searchResults.Response === 'False') {
-          // Indicates that there were no matching movies
-          this.hasResponses = false;
           this.totalResults = 0;
         } else {
-          // Indicates that there were matching movies
-          this.hasResponses = true;
-
           // Keeps track of the total number of matching movies for use in pagination
           this.totalResults = searchResults.totalResults;
 
@@ -272,6 +270,11 @@ export class SearchResultsComponent implements OnInit {
    * Shows movies on all pages that were released within the specified year range.
    */
   onSubmitFilterByYear() {
-    this.showAllMovies(this.filterByYearForm.value['startYear'], this.filterByYearForm.value['endYear']);
+    if (this.filterByYearForm.value['startYear'] <= this.filterByYearForm.value['endYear']) {
+      this.invalidYearRange = false;
+      this.showAllMovies(this.filterByYearForm.value['startYear'], this.filterByYearForm.value['endYear']);
+    } else {
+      this.invalidYearRange = true;
+    }
   }
 }

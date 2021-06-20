@@ -2,24 +2,24 @@
   <div class="col-12">
 
     <!-- Prompt displayed if no search has occurred -->
-    <div *ngIf="movies.length === 0 && hasResponses" class="alert alert-light" role="alert">
+    <div *ngIf="!hasSearched" class="alert alert-light" role="alert">
       Please use the search bar to find movies
     </div>
 
     <!-- Informs user if search had no results -->
-    <div *ngIf="!hasResponses" class="alert alert-danger" role="alert">
+    <div *ngIf="hasSearched && movies.length === 0" class="alert alert-danger" role="alert">
       Your search had no results
     </div>
 
   </div>
 
   <!-- Filter by year -->
-  <div *ngIf="movies.length > 0">
+  <div *ngIf="hasSearched">
     <form [formGroup]="filterByYearForm" (ngSubmit)="onSubmitFilterByYear()">
       <div class="row ms-1 my-1">
         <div class="form-check">
           <input formControlName="filterByYear" id="filterByYear" type="checkbox" class="form-check-input">
-          <label for="filterByYear" class="form-check-label">Filter by Year of Release</label>
+          <label for="filterByYear" class="form-check-label">Filter Current Results by Year of Release</label>
         </div>
       </div>
 
@@ -52,6 +52,11 @@
         </button>
       </div>
     </form>
+
+    <!-- Informs user if search had no results -->
+    <div *ngIf="invalidYearRange" class="alert alert-danger" role="alert">
+      Start year cannot be greater than end year. Please enter a start and/or end year.
+    </div>
   </div>
 
   <!-- Search Results -->
