@@ -16,7 +16,7 @@ import { ByIdResultModel } from '../models/by-id-result.model';
 })
 export class SearchResultsComponent implements OnInit {
   apiKey = '81a25063';
-  baseUrl = 'http://www.omdbapi.com/';
+  baseUrl = 'https://www.omdbapi.com/';
 
   movies: MovieSummary[] = [];
   selectedMovie!: Movie;
