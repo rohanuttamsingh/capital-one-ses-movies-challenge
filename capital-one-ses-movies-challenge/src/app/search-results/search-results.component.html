@@ -13,6 +13,47 @@
 
   </div>
 
+  <!-- Filter by year -->
+  <div *ngIf="movies.length > 0">
+    <form [formGroup]="filterByYearForm" (ngSubmit)="onSubmitFilterByYear()">
+      <div class="row ms-1 my-1">
+        <div class="form-check">
+          <input formControlName="filterByYear" id="filterByYear" type="checkbox" class="form-check-input">
+          <label for="filterByYear" class="form-check-label">Filter by Year of Release</label>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row justify-content-between my-1">
+        <!-- Can only enter in the start and end year fields if the checkbox has been checked -->
+        <input
+          [readOnly]="!filterByYearForm.value['filterByYear']"
+          formControlName="startYear"
+          type="number"
+          class="form-control me-2"
+          placeholder="Start Year">
+        <input
+          [readOnly]="!filterByYearForm.value['filterByYear']"
+          formControlName="endYear"
+          type="number"
+          class="form-control me-2"
+          placeholder="End Year">
+
+        <!-- Can only submit the form if the checkbox has been checked and both the start and end year fields have
+          valid values -->
+        <button
+          [disabled]="
+            !filterByYearForm.value['filterByYear'] ||
+            !filterByYearForm.value['startYear'] ||
+            !filterByYearForm.value['endYear']
+          "
+          type="submit"
+          class="btn btn-outline-success">
+          Filter
+        </button>
+      </div>
+    </form>
+  </div>
+
   <!-- Search Results -->
   <span *ngIf="movies.length > 0" class="my-1">Click on a movie to view more info</span>
   <div *ngIf="movies.length > 0" class="col-5 left-panel" style="height: 75vh; overflow-y: scroll; cursor: pointer;">
@@ -69,31 +110,35 @@
 
   <!-- Pagination and Show More -->
   <div class="d-flex flex-row justify-content-between my-5">
-    <!-- Previous button should be able to be clicked in there are results on the previous page -->
+    <!-- Previous button should be able to be clicked in there are results on the previous page and results are
+     being paginated rather than all results being shown -->
     <button
       (click)="onClickPrevious()"
-      [disabled]="!hasPreviousMovies"
+      [disabled]="!hasPreviousMovies || showingAll"
       class="btn btn-lg"
-      [ngClass]="hasPreviousMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      [ngClass]="hasPreviousMovies && !showingAll ? 'btn-outline-primary' : 'btn-outline-secondary'"
       type="button">
       &lt;&lt; Prev Movies
     </button>
 
+    <!-- User should not be able to click the show more button if there are no results or if they have already clicked
+    the button -->
     <button
       (click)="onClickShowMore()"
-      [disabled]="movies.length === 0"
+      [disabled]="movies.length === 0 || showingAll"
       class="btn btn-lg"
-      [ngClass]="movies.length > 0 ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      [ngClass]="movies.length > 0 && !showingAll ? 'btn-outline-primary' : 'btn-outline-secondary'"
       type="button">
       Show More
     </button>
 
-    <!-- Next button should be able to be clicked in there are results on the next page -->
+    <!-- Next button should be able to be clicked in there are results on the next page and results are
+     being paginated rather than all results being shown -->
     <button
       (click)="onClickNext()"
-      [disabled]="!hasNextMovies"
+      [disabled]="!hasNextMovies || showingAll"
       class="btn btn-lg"
-      [ngClass]="hasNextMovies ? 'btn-outline-primary' : 'btn-outline-secondary'"
+      [ngClass]="hasNextMovies && !showingAll ? 'btn-outline-primary' : 'btn-outline-secondary'"
       type="button">
       Next Movies &gt;&gt;
     </button>

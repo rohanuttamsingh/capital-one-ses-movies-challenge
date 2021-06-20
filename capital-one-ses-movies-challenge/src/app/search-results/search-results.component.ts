@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { from } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
@@ -25,6 +26,10 @@ export class SearchResultsComponent implements OnInit {
   totalResults = 0;
 
   hasResponses = true;
+
+  showingAll = false;
+
+  filterByYearForm = new FormGroup({ 'default': new FormControl('') });
 
   /**
    * The index in the movies array that contains the movies of the current page of results is one
@@ -54,6 +59,13 @@ export class SearchResultsComponent implements OnInit {
         this.title = params['title'];
         this.currentPage = 1;
         this.searchForIds(this.currentPage);
+        this.showingAll = false;
+
+        this.filterByYearForm = new FormGroup({
+          'filterByYear': new FormControl(false, [Validators.required]),
+          'startYear': new FormControl('', [Validators.required]),
+          'endYear': new FormControl('', [Validators.required])
+        })
       }
     });
   }
@@ -184,9 +196,14 @@ export class SearchResultsComponent implements OnInit {
 
   /**
    * GETs basic info about every movie on any page with a matching title as the user's query, and pushes this
-   * info to the array of movies results to be displayed.
+   * info to the array of movies results to be displayed. Optional parameters allow the user to specify an inclusive
+   * range of years, and only movies released within that range will be added to the array of movie results to be
+   * displayed.
    */
-  showAllMovies() {
+  showAllMovies(startYear?: number, endYear?: number) {
+    // Indicates that all movies are being shown for use in pagination
+    this.showingAll = true;
+
     // Resets the array of movies results to empty it of any previous searches
     this.movies = [];
 
@@ -218,25 +235,43 @@ export class SearchResultsComponent implements OnInit {
         // Need to append key to end of every request
         searchParams = searchParams.append('apiKey', this.apiKey);
 
-        // GETs basic info about each matching movie and pushes that info into the array of movies results
+        // GETs basic info about each matching movie
         return this.http.get<BySearchResultModel>(this.baseUrl, { params: searchParams });
       })
     ).subscribe((searchResults: BySearchResultModel) => {
       // Adds the basic movies info to the array of movies results
       for (const result of searchResults.Search) {
-        this.movies.push(
-          {
+        if (startYear && endYear) {
+          // If filtering by release year, checks that the movie is within the year range
+          if (startYear <= +result.Year && +result.Year <= endYear) {
+            this.movies.push({
+              title: result.Title,
+              releaseYear: +result.Year,
+              posterUrl: result.Poster,
+              imdbId: result.imdbID
+            });
+          }
+        } else {
+          // If not filtering by year, adds all matching movies to the array of movies results
+          this.movies.push({
             title: result.Title,
             releaseYear: +result.Year,
             posterUrl: result.Poster,
             imdbId: result.imdbID
-          }
-        );
+          });
+        }
       }
 
       // Always sets the selected movie to the first movie in the array, so that the first movie on the first page is
       // selected regardless of the number of pages
       this.setSelectedMovie(this.movies[0]);
     });
+  }
+
+  /**
+   * Shows movies on all pages that were released within the specified year range.
+   */
+  onSubmitFilterByYear() {
+    this.showAllMovies(this.filterByYearForm.value['startYear'], this.filterByYearForm.value['endYear']);
   }
 }
