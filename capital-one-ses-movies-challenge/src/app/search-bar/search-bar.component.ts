@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
@@ -10,12 +10,21 @@ import { Router } from '@angular/router';
 export class SearchBarComponent implements OnInit {
   searchForm = new FormGroup({ 'default': new FormControl('') });
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.searchForm = new FormGroup(
-      { 'title': new FormControl('', [Validators.required]) }
-    );
+    this.route.queryParams.subscribe((params) => {
+      if (params['title']) {
+        this.searchForm = new FormGroup(
+          { 'title': new FormControl(params['title'], [Validators.required]) }
+        );
+      } else {
+        this.searchForm = new FormGroup(
+          { 'title': new FormControl('', [Validators.required]) }
+        );
+      }
+    });
   }
 
   /**
