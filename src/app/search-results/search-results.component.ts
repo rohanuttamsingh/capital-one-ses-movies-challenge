@@ -26,6 +26,7 @@ export class SearchResultsComponent implements OnInit {
   totalResults = 0;
 
   hasSearched = false;
+  hasValidResponse = true;
 
   showingAll = false;
   invalidYearRange = false;
@@ -101,8 +102,11 @@ export class SearchResultsComponent implements OnInit {
     this.http.get<BySearchResultModel>(this.baseUrl, { params: searchParams })
       .subscribe((searchResults: BySearchResultModel) => {
         if (searchResults.Response === 'False') {
+          this.hasValidResponse = false;
           this.totalResults = 0;
         } else {
+          this.hasValidResponse = true;
+
           // Keeps track of the total number of matching movies for use in pagination
           this.totalResults = searchResults.totalResults;
 
